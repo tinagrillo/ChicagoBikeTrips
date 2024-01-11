@@ -47,9 +47,82 @@ Leading questions for analysis:
 ### Data Analysis
 
 ```sql
-SELECT count(*) as Users, member_casual
+--For the first set of queries, we dive into the differences between casuals and members:
+
+--Pulling the percentage of users who are members vs casuals
+SELECT
+count(member_casual) as totalusers,
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual") as casualtotal,
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member") as membertotal, 
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual")/count(member_casual)*100 as casualpercent,
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member")/count(member_casual)*100 as memberpercent
 FROM `bikes-407115.TripData.February`
-GROUP BY member_casual;
+-- 77% of users are members while 23% of users are casual
+
+--Percent of Users by Day of Week and Member vs Casual
+SELECT
+day_of_week,
+member_casual,
+count(member_casual) as users,
+count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.February`)*100 as percent
+FROM `bikes-407115.TripData.February`
+GROUP BY day_of_week, member_casual
+ORDER BY percent desc
+-- the highest percent of users being 15% for members on Tuesdays
+-- the lowest percent of users being 2% for casual users on Thursdays
+-- the highest percent of casual users is 5% on Sundays
+-- the lowest percent of members is 9% on Fridays and Saturdays
+--From this, we've established that members are substantially more active on Tuesdays coming out of the weekend while casual users are the most active on weekends, with Sundays being the most active.
+
+--Percent Totals grouped by Day of Week
+SELECT day_of_week, count(member_casual) as users, count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.February`)*100 as percent
+FROM `bikes-407115.TripData.February`
+GROUP BY day_of_week
+ORDER BY percent desc
+
+-- The next set of queries will dive into users who use classic bikes, electric bikes, and docked bikes:
+
+--testing out simple query to display total users grouped by member/casual and choice of bike:
+SELECT count(member_casual) as users, rideable_type, member_casual
+FROM `bikes-407115.TripData.February`
+GROUP BY member_casual, rideable_type
+ORDER BY users desc
+
+--Percentages and totals of users using each type of bike:
+SELECT count(member_casual) as totalusers, 
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual") as casualtotal, 
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member") as membertotal, 
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual" AND rideable_type = "classic_bike")/count(member_casual)*100 as casualclassicpercent,
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member" AND rideable_type = "classic_bike")/count(member_casual)*100 as memberclassicicpercent,
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual" AND rideable_type = "electric_bike")/count(member_casual)*100 as casualelectricpercent,
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member" AND rideable_type = "electric_bike")/count(member_casual)*100 as memberelectricpercent,
+(select count(member_casual) from `bikes-407115.TripData.February` where rideable_type = "docked_bike")/count(member_casual)*100 as dockedbikepercent
+FROM `bikes-407115.TripData.February`
+-- ~39% of users are members using classic bikes
+-- ~38% of users are members using electric bikes
+-- ~13% of users are casuals using electric bikes
+-- ~8% of users are casuals using classic bikes
+-- ~1% of users casuals using docked bikes (0% are members)
+
+--Testing/verifying totals between users (member vs casual), grouped by day of the week
+SELECT
+day_of_week,
+count(member_casual) as users,
+(select count(*) from `bikes-407115.TripData.February` where member_casual = "member") as members,
+(select count(*) from `bikes-407115.TripData.February` where member_casual = "casual") as casuals
+FROM `bikes-407115.TripData.February`
+GROUP BY day_of_week
+ORDER BY users desc
+
+--Percentages of users grouped by Day of Week and Member/Casual:
+SELECT day_of_week,
+member_casual,
+count(member_casual) as users,
+count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.February`)*100 as percent
+FROM `bikes-407115.TripData.February`
+GROUP BY day_of_week, member_casual
+ORDER BY percent desc
+--Final table used to easily show distribution of users throughout the week
 ```
 
 ### Results
