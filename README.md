@@ -49,22 +49,43 @@ Leading questions for analysis:
 ```sql
 --For the first set of queries, we dive into the differences between casuals and members:
 
+TOTALS OF USERS BY DAY OF WEEK
+
+
 --Pulling the percentage of users who are members vs casuals
+
 SELECT
-count(member_casual) as totalusers,
-(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual") as casualtotal,
-(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member") as membertotal, 
-(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual")/count(member_casual)*100 as casualpercent,
-(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member")/count(member_casual)*100 as memberpercent
+count(member_casual)
+as totalusers,
+
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual")
+as casualtotal,
+
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member")
+as membertotal,
+
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual")/count(member_casual)*100
+as casualpercent,
+
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member")/count(member_casual)*100
+as memberpercent
+
 FROM `bikes-407115.TripData.February`
 -- 77% of users are members while 23% of users are casual
 
 --Percent of Users by Day of Week and Member vs Casual
 SELECT
+
 day_of_week,
+
 member_casual,
-count(member_casual) as users,
-count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.February`)*100 as percent
+
+count(member_casual)
+as users,
+
+count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.February`)*100
+as percent
+
 FROM `bikes-407115.TripData.February`
 GROUP BY day_of_week, member_casual
 ORDER BY percent desc
