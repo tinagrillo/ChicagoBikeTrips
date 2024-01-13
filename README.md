@@ -49,8 +49,6 @@ Leading questions for analysis:
 ```sql
 --For the first set of queries, we dive into the differences between casuals and members:
 
-TOTALS OF USERS BY DAY OF WEEK
-
 
 --Pulling the percentage of users who are members vs casuals
 
@@ -145,6 +143,11 @@ GROUP BY day_of_week, member_casual
 ORDER BY percent desc
 --Final table used to easily show distribution of users throughout the week
 ```
+### ![TotalUsersDayWeek](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/632412d8-2693-43c3-af3a-f4bf47850cc8)
+
+### ![PercentageUsersDayWeek](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/24bb0530-6435-4814-83f8-fb9ffbaf36dc)
+
+
 
 ### Results
   1. Tuesday is the most popular day to ride a bike overall - Sunday is the most popular day for casual users
