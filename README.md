@@ -13,13 +13,19 @@
 
 ### Project Overview
 
-Description of Project
+This is a case study of a bike-share program in Chicago, Illinois - the datasets were provided by the Google Data Analytics course. The data has been made available by Motivate International Inc. under this [license](https://divvybikes.com/data-license-agreement).
+This case study will be focusing on the Cyclistic bike-share program (Cyclistic is the name given to the company to keep anonymity).
+
+In this case study, we will be focusing on this bike-share data for February 2023.  There are three main questions we will consider:
+  1. How do annual members and casual riders use Cyclistic bikes differently?
+  2. Why would casual riders buy Cyclistic annual memberships?
+  3. How can Cyclistic use digital media to influence casual riders to become members?
 
 ### Data Sources
 
-[2023 Chicago City Bike Data](https://divvy-tripdata.s3.amazonaws.com/index.html) - Dataset provided by the Google Analytics Certificate Program
-  - .csv
-  - .csv
+[2023 Chicago City Bike Data](https://divvy-tripdata.s3.amazonaws.com/index.html) - Dataset provided by Motivate International Inc.
+  - 202302-divvy-tripdata.csv - raw data file
+  - TripData1.csv - cleaned data file
 
 ### Tools
 
@@ -86,6 +92,7 @@ SELECT day_of_week, count(member_casual) as users, count(member_casual)/(select 
 FROM `bikes-407115.TripData.February`
 GROUP BY day_of_week
 ORDER BY percent desc
+day_of_week,users,percent
 -- ~19% of users ride on Tuesdays
 -- ~16% of users ride on Mondays
 -- ~16% of users ride on Sundays
@@ -93,6 +100,7 @@ ORDER BY percent desc
 -- ~13% of users ride on Saturdays
 -- ~11% of users ride on Thursdays
 -- ~11% of users ride on Fridays
+--Exported as PercentTotal_DayOfWeek.csv (attached file)
 
 
 --Percent of Users by Day of Week and Member vs Casual
@@ -108,6 +116,7 @@ ORDER BY percent desc
 -- the highest percent of casual users is 5% on Sundays
 -- the lowest percent of members is 9% on Fridays and Saturdays
 --From this, we've established that members are substantially more active on Tuesdays coming out of the weekend while casual users are the most active on weekends, with Sundays being the most active.
+--Exported as PercentUsers_DayOfWeek.csv (attached file)
 ```
 
 ### ![PercentageUsersDayWeek](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/24bb0530-6435-4814-83f8-fb9ffbaf36dc)
@@ -143,6 +152,7 @@ FROM `bikes-407115.TripData.February`
 -- ~13% of users are casuals using electric bikes
 -- ~8% of users are casuals using classic bikes
 -- ~1% of users casuals using docked bikes (0% are members)
+--Exported as PercentUsers_RideableType.csv (attached file)
 
 --Testing/verifying totals between users (member vs casual), grouped by day of the week
 
@@ -162,22 +172,30 @@ count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.Feb
 FROM `bikes-407115.TripData.February`
 GROUP BY day_of_week, member_casual
 ORDER BY percent desc
---Final table used to easily show distribution of users throughout the week
-```
-### Other Visualizations
-After importing the data into Tableau, this vizualization was created to show the number of users by different bike types and day of week
-![TotalUsersBikeType](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/e38491b1-d6e1-4c69-9a0f-ca241dad82d0) 
 
+
+SELECT rideable_type, day_of_week, count(member_casual) as users, member_casual, count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.February`)*100 as percent
+FROM `bikes-407115.TripData.February`
+GROUP BY rideable_type, day_of_week, member_casual
+ORDER BY percent desc
+--Final table used to easily show distribution of users and bike types throughout the week
+--Exported as ExpandedRideableType_PercentUsers.csv (attached file)
+```
+![TotalUsersBikeType](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/e38491b1-d6e1-4c69-9a0f-ca241dad82d0)
+
+After importing the data table into Tableau, this vizualization easily shows the number of users by different bike types and day of week.
 Here we can easily see how the members greatly exceed casual users
 - Classic bikes are slightly more preferred amongst members
 - Electric bikes are much more preferred amongst casual users
 - Only casual users show using a 'docked' bike
 
-Although "docked" bike data shows in this visualization, it has been largely treated as outlier data for analysis purposes
+Although "docked" bike data shows in this visualization, it has been largely treated as outlier data for analysis purposes;
 
 In this last visualization, we will omit the docked bike data
 
-The visualization below shows users' preferred time of day to ride:
+### Other Visualizations
+
+Created in Tableau, the table below focuses on users' preferred time of day to ride:
 ![TimeDayBikeType](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/0d53ebe8-2e8d-444d-b062-d341d5b8a98e)
 We can see here that across all types of bikes, 4pm-5pm is the preferred time to ride
 - Amongst members, 5pm is the obvious preferred time
@@ -186,6 +204,7 @@ We can see here that across all types of bikes, 4pm-5pm is the preferred time to
   - For casuals using electric bikes, there is a higher preference for morning times around 7am-8am than with classic bikes
 
 ### Results
+[Link to Tableau Dashboard](https://public.tableau.com/app/profile/bettina.grillo/viz/February2023ChicagoCityBikeTrips-Project2/DashboardDark)
   1. Tuesday is the most popular day to ride a bike overall - Sunday is the most popular day for casual users
   2. There are much more members riding than casual users - 23% casual users vs 77% members
   3. Electric bikes were the most commonly used - 52% of all users
