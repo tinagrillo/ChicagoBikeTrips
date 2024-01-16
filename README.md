@@ -47,24 +47,52 @@ Leading questions for analysis:
 ### Data Analysis
 
 ```sql
---For the first set of queries, we dive into the differences between casuals and members:
+--In the first query for analysis, we'll look into total users by day of the week
+
+
+--Pulling the total number of users by day of the week
+
+SELECT count(member_casual) as users, day_of_week
+FROM `bikes-407115.TripData.February`
+GROUP BY day_of_week
+ORDER BY users asc
+-- Tuesday is the most popular day of the week for riders
+-- Friday is the least popular day for riders, with Thursday trailing very close behind it
+-- There is a steady, upward trend of users from Friday to Tuesday - the dip in users is from Wednesday to Friday
+
+```
+
+### ![TotalUsersDayWeek](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/632412d8-2693-43c3-af3a-f4bf47850cc8)
+
+```sql
+--For the next set of queries, we dive into the differences between casuals and members:
 
 
 --Pulling the percentage of users who are members vs casuals
 
 SELECT
-count(member_casual)
-as totalusers,
-(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual")
-as casualtotal,
-(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member")
-as membertotal,
-(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual")/count(member_casual)*100
-as casualpercent,
-(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member")/count(member_casual)*100
-as memberpercent
+count(member_casual) as totalusers,
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual") as casualtotal,
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member") as membertotal,
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "casual")/count(member_casual)*100 as casualpercent,
+(select count(member_casual) from `bikes-407115.TripData.February` where member_casual = "member")/count(member_casual)*100 as memberpercent
 FROM `bikes-407115.TripData.February`
 -- 77% of users are members while 23% of users are casual
+
+
+--Total Users (percentage) grouped by Day of Week
+
+SELECT day_of_week, count(member_casual) as users, count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.February`)*100 as percent
+FROM `bikes-407115.TripData.February`
+GROUP BY day_of_week
+ORDER BY percent desc
+-- ~19% of users ride on Tuesdays
+-- ~16% of users ride on Mondays
+-- ~16% of users ride on Sundays
+-- ~14% of users ride on Wednesdays
+-- ~13% of users ride on Saturdays
+-- ~11% of users ride on Thursdays
+-- ~11% of users ride on Fridays
 
 
 --Percent of Users by Day of Week and Member vs Casual
@@ -80,14 +108,11 @@ ORDER BY percent desc
 -- the highest percent of casual users is 5% on Sundays
 -- the lowest percent of members is 9% on Fridays and Saturdays
 --From this, we've established that members are substantially more active on Tuesdays coming out of the weekend while casual users are the most active on weekends, with Sundays being the most active.
+```
 
+### ![PercentageUsersDayWeek](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/24bb0530-6435-4814-83f8-fb9ffbaf36dc)
 
---Percent Totals grouped by Day of Week
-
-SELECT day_of_week, count(member_casual) as users, count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.February`)*100 as percent
-FROM `bikes-407115.TripData.February`
-GROUP BY day_of_week
-ORDER BY percent desc
+```sql
 
 
 -- The next set of queries will dive into users who use CLASSIC bikes, ELECTRIC bikes, and DOCKED bikes:
@@ -99,6 +124,8 @@ SELECT count(member_casual) as users, rideable_type, member_casual
 FROM `bikes-407115.TripData.February`
 GROUP BY member_casual, rideable_type
 ORDER BY users desc
+-- Members using classic bikes slightly outnumber members using electric bikes
+
 
 --Percentages and totals of users using each type of bike:
 
@@ -119,8 +146,7 @@ FROM `bikes-407115.TripData.February`
 
 --Testing/verifying totals between users (member vs casual), grouped by day of the week
 
-SELECT
-day_of_week,
+SELECT day_of_week,
 count(member_casual) as users,
 (select count(*) from `bikes-407115.TripData.February` where member_casual = "member") as members,
 (select count(*) from `bikes-407115.TripData.February` where member_casual = "casual") as casuals
@@ -130,8 +156,7 @@ ORDER BY users desc
 
 --Percentages of users grouped by Day of Week and Member/Casual:
 
-SELECT day_of_week,
-member_casual,
+SELECT day_of_week, member_casual,
 count(member_casual) as users,
 count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.February`)*100 as percent
 FROM `bikes-407115.TripData.February`
@@ -139,11 +164,26 @@ GROUP BY day_of_week, member_casual
 ORDER BY percent desc
 --Final table used to easily show distribution of users throughout the week
 ```
-### ![TotalUsersDayWeek](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/632412d8-2693-43c3-af3a-f4bf47850cc8)
+### Other Visualizations
+After importing the data into Tableau, this vizualization was created to show the number of users by different bike types and day of week
+![TotalUsersBikeType](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/e38491b1-d6e1-4c69-9a0f-ca241dad82d0) 
 
-### ![PercentageUsersDayWeek](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/24bb0530-6435-4814-83f8-fb9ffbaf36dc)
+Here we can easily see how the members greatly exceed casual users
+- Classic bikes are slightly more preferred amongst members
+- Electric bikes are much more preferred amongst casual users
+- Only casual users show using a 'docked' bike
 
+Although "docked" bike data shows in this visualization, it has been largely treated as outlier data for analysis purposes
 
+In this last visualization, we will omit the docked bike data
+
+The visualization below shows users' preferred time of day to ride:
+![TimeDayBikeType](https://github.com/tinagrillo/ChicagoBikeTrips/assets/31528924/0d53ebe8-2e8d-444d-b062-d341d5b8a98e)
+We can see here that across all types of bikes, 4pm-5pm is the preferred time to ride
+- Amongst members, 5pm is the obvious preferred time
+- Amongst casual users, 4pm is slightly more preferred to 5pm
+- Trend lines in graph show that the overall trend between members is nearly identical
+  - For casuals using electric bikes, there is a higher preference for morning times around 7am-8am than with classic bikes
 
 ### Results
   1. Tuesday is the most popular day to ride a bike overall - Sunday is the most popular day for casual users
@@ -151,8 +191,11 @@ ORDER BY percent desc
   3. Electric bikes were the most commonly used - 52% of all users
      - 47% of users used classic bikes
      - 1% of users used docked bikes (casual users only)
+  4. The most popular time to ride across all users is between 4pm-5pm
+  5. Members have almost no preference for classic or electric bikes while casual users seem to prefer electric bikes
     
 ### Recommendations
 - Focus on the selling the strengths of members
 - Digital Media Marketing - Hire influencers to vlog/showcase the benefits and lifestyle of being a member in the Cyclist program
-- Maintain and foster the relationship with members - maintain or provide new incentives (i.e. products, services, discounts)
+- Maintain and foster the relationship with members - maintain or provide new incentives (i.e. products, services, discounts, sales)
+- Initiate incentive/marketting strategy that overlaps with the most popular times that users ride
