@@ -66,6 +66,7 @@ as memberpercent
 FROM `bikes-407115.TripData.February`
 -- 77% of users are members while 23% of users are casual
 
+
 --Percent of Users by Day of Week and Member vs Casual
 
 SELECT day_of_week, member_casual,
@@ -80,6 +81,7 @@ ORDER BY percent desc
 -- the lowest percent of members is 9% on Fridays and Saturdays
 --From this, we've established that members are substantially more active on Tuesdays coming out of the weekend while casual users are the most active on weekends, with Sundays being the most active.
 
+
 --Percent Totals grouped by Day of Week
 
 SELECT day_of_week, count(member_casual) as users, count(member_casual)/(select count(member_casual)from `bikes-407115.TripData.February`)*100 as percent
@@ -87,9 +89,11 @@ FROM `bikes-407115.TripData.February`
 GROUP BY day_of_week
 ORDER BY percent desc
 
--- The next set of queries will dive into users who use classic bikes, electric bikes, and docked bikes:
 
---testing out simple query to display total users grouped by member/casual and choice of bike:
+-- The next set of queries will dive into users who use CLASSIC bikes, ELECTRIC bikes, and DOCKED bikes:
+
+
+--testing out simple query to display total users grouped by member/casual and bike type:
 
 SELECT count(member_casual) as users, rideable_type, member_casual
 FROM `bikes-407115.TripData.February`
