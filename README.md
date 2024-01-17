@@ -15,7 +15,8 @@
 
 This is a case study of a bike-share program in Chicago, Illinois - the datasets were provided by the Google Data Analytics course. The data has been made available by Motivate International Inc. under this [license](https://divvybikes.com/data-license-agreement).
 This case study will be focusing on the "Cyclistic" bike-share program.
-"Cyclistic" is a bike-share program that features more than 5,800 bicycles and 600 docking stations.  Cyclistic sets itself apart by also offering reclining bikes, hand tricycles, and cargo bikes, making bike-share more inclusive to people with disabilities and riders who can't use a standard two-wheeled bike.  The majority of riders opt for traditional bike bikes; about 8% of riders use the assistive options. Cyclistic users are more likely to ride for leisure, but about 30% use them to commute to work each day.
+
+Cyclistic is a bike-share program that features more than 5,800 bicycles and 600 docking stations.  Cyclistic sets itself apart by also offering reclining bikes, hand tricycles, and cargo bikes, making bike-share more inclusive to people with disabilities and riders who can't use a standard two-wheeled bike.  The majority of riders opt for traditional bike bikes; about 8% of riders use the assistive options. Cyclistic users are more likely to ride for leisure, but about 30% use them to commute to work each day.
 
 
 In this case study, we will be focusing on this bike-share data for February 2023.  There are three main questions we will consider:
