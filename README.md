@@ -14,7 +14,7 @@
 ### Project Overview
 
 This is a case study of a bike-share program in Chicago, Illinois - the datasets were provided by the Google Data Analytics course. The data has been made available by Motivate International Inc. under this [license](https://divvybikes.com/data-license-agreement).
-This case study will be focusing on the Cyclistic bike-share program (Cyclistic is the name given to the company to keep anonymity).
+This case study will be focusing on the "Cyclistic" bike-share program.
 
 In this case study, we will be focusing on this bike-share data for February 2023.  There are three main questions we will consider:
   1. How do annual members and casual riders use Cyclistic bikes differently?
